@@ -32,14 +32,17 @@ k = 1;   % number of outputs
 % input type
 input_type = param.input_type;
 
+%random seed
+seed = randi(intmax('uint32'));
+
 %% Initialize matrix weights
 % input weights
-input = Win.*rand(N,N_th).*(rand(N,N_th) < Winp);
+input = Win.*rand(RandStream('mt19937ar','Seed',seed),N,N_th).*(rand(RandStream('mt19937ar','Seed',seed),N,N_th) < Winp);
 
 % static weights
 rng('shuffle')
 if Pexc == 0
-    static = G*(randn(N,N)).*(rand(N,N)<p)/(sqrt(N)*p);
+    static = G*(randn(RandStream('mt19937ar','Seed',seed),N,N)).*(rand(RandStream('mt19937ar','Seed',seed),N,N)<p)/(sqrt(N)*p);
     
     % set the row average to be zero, explicitly, to induce chaotic spiking
     for i = 1:1:N
@@ -70,7 +73,7 @@ else
 end
 
 % feedback weights
-feedback = Q*(2*rand(N,k)-1);
+feedback = Q*(2*rand(RandStream('mt19937ar','Seed',2411),N,k)-1);
 
 % output weights
 output = zeros(N, k);
@@ -226,12 +229,14 @@ for epoch = 1:N_total
     training_output(epoch).acc = acc;
     disp(['Test accuracy = ', num2str(acc)])
     training_output(epoch).weights = weights;
+    training_output(epoch).seed = seed;
 end
 
 %% Save the output of the network
 output_save.training_output = training_output;
 output_save.scale_param = scale_param;
 
+% saves the training output with all scaled parameter values as filename
 f = filesep;
 filename = '';
 field_names = fieldnames(scale_param);
@@ -239,12 +244,18 @@ for i = 1 : length(field_names)
     field = char(field_names(i));
     value = getfield(scale_param, field);
     str = [field '_' num2str(value)];
-    
     filename = [filename str];
 end
-% saves the training output with all scaled parameter values as filename
-savename = [savefolder f filename '.mat'];
-save(savename, 'training_output', 'scale_param')
+filename = [filename 'Acc_' num2str(acc) 'Seed_' seed]; %add accuracy and seed to filename
+
+
+filename = [savefolder f filename '.mat'];
+% filename = fullfile(savefolder, filename, '.mat')
+
+
+filename = auto_rename(filename, ' (0)');
+
+save(filename, 'training_output', 'scale_param')
 
 %TODO
 % savename2 = [savefolder f 'input_save.mat'];
