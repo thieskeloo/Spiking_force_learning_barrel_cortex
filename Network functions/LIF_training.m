@@ -33,14 +33,14 @@ k = 1;   % number of outputs
 input_type = param.input_type;
 
 %random seed
-seed = randi(intmax('uint32'));
+rng('shuffle')
+seed = randi(intmax('uint32'), 'uint32')
 
 %% Initialize matrix weights
 % input weights
 input = Win.*rand(RandStream('mt19937ar','Seed',seed),N,N_th).*(rand(RandStream('mt19937ar','Seed',seed),N,N_th) < Winp);
 
 % static weights
-rng('shuffle')
 if Pexc == 0
     static = G*(randn(RandStream('mt19937ar','Seed',seed),N,N)).*(rand(RandStream('mt19937ar','Seed',seed),N,N)<p)/(sqrt(N)*p);
     
@@ -246,7 +246,7 @@ for i = 1 : length(field_names)
     str = [field '_' num2str(value)];
     filename = [filename str];
 end
-filename = [filename 'Acc_' num2str(acc) 'Seed_' seed]; %add accuracy and seed to filename
+filename = [filename 'Acc_' num2str(acc) 'Seed_' int2str(seed)]; %add accuracy and seed to filename
 
 
 filename = [savefolder f filename '.mat'];
