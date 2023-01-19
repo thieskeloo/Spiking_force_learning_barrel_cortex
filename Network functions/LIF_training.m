@@ -34,7 +34,7 @@ input_type = param.input_type;
 
 %random seed
 rng('shuffle')
-seed = randi(intmax('uint32'), 'uint32')
+seed = 42;%randi(intmax('uint32'), 'uint32');
 
 %% Initialize matrix weights
 % input weights
@@ -149,10 +149,10 @@ for epoch = 1:N_total
         old_output = output;
         
         if strcmp('spikes', input_type)
-            [~, output, ~, ~, ~] =...
+            [err, output, Zx, Z_out, tspikes] =...
                 LIF_spiking_network(param, weights, thalamus_input, target, FORCE);
         else
-            [~, output, ~, ~, ~] =...
+            [err, output, Zx, Z_out, tspikes] =...
                 LIF_spiking_network_no_filt(param, weights, thalamus_input, target, FORCE);
         end
         
@@ -160,7 +160,26 @@ for epoch = 1:N_total
         d_output = old_output - output;
         weight_change(trial, 1) = sum(abs(d_output));
         weights.output = output;
+        
+        % save the validation trials and first touches
+        train_data.trials{trial} = trialId;
+        train_data.first_touches(trial,1) = test_trials(trial).first_touch;
+        
+        % get the spikinging statistics
+        trial_length = length(Z_out);
+        [A_t, ISI, Cv] = spike_stats(tspikes, trial_length , N);
+        
+        weights.output = output_weights;
+        train_data.error{trial} = err;
+        train_data.Zx{trial} = Zx;
+        train_data.Z_out{trial} = Z_out;
+        train_data.tspikes{trial} = tspikes;
+        train_data.stats{trial}.A_t = A_t;
+        train_data.stats{trial}.ISI = ISI;
+        train_data.stats{trial}.Cv = Cv;
     end
+
+
     
     % --------------------------VALIDATION---------------------------------
     disp(['Testing network, number of trials = ', num2str(N_test)])
@@ -180,7 +199,7 @@ for epoch = 1:N_total
         else
             % get the struct name and load it
             trial_mat = test_trials(trial).spike_struct;
-            load( ['./Spiking structures/', trial_mat]);
+            load(['./Spiking structures/', trial_mat]);
         end
         
         % save the validation trials and first touches
@@ -221,13 +240,14 @@ for epoch = 1:N_total
     
     % calculate the test accuracy
     acc = val_acc(N_test, test_output.Z_out, test_output.Zx, test_output.first_touches);
+    disp(['Test accuracy = ', num2str(acc)])
     
     % save the training data per epoch
     training_output(epoch).weight_change = weight_change;
     training_output(epoch).train_trials = train_trials;
+    training_output(epoch).train_output = train_data;
     training_output(epoch).test_output = test_output;
     training_output(epoch).acc = acc;
-    disp(['Test accuracy = ', num2str(acc)])
     training_output(epoch).weights = weights;
     training_output(epoch).seed = seed;
 end
@@ -253,7 +273,7 @@ filename = [savefolder f filename '.mat'];
 % filename = fullfile(savefolder, filename, '.mat')
 
 
-filename = auto_rename(filename, ' (0)');
+filename = auto_rename(filename, ' (0)'); %adds (x) extention to filename if filename already exists, with x increasing
 
 save(filename, 'training_output', 'scale_param')
 
