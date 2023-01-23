@@ -42,7 +42,7 @@ for i = 1 : length(train_dist)
     
     index = index + 1;
 end
-    
+
 
 % select validation trials outside of train trials in correct ratio
 val_prox = prox_index( N_train/2 + 1 : N_train/2 + N_test/2);
@@ -67,12 +67,12 @@ for i = 1 : length(val_dist)
 end
 
 % convert to cells and shuffle
-train_cell = struct2cell(train_all); 
-val_cell = struct2cell(val_all); 
+train_cell = struct2cell(train_all);
+val_cell = struct2cell(val_all);
 
 % shuffle the cells
 train_cell = train_cell(:, :, randperm(length(train_all)));
-val_cell = val_cell(:, :, randperm(length(val_all))); 
+val_cell = val_cell(:, :, randperm(length(val_all)));
 
 % convert them back to structs
 fields = ["trial", "session", "spike_struct", "ytrain", "first_touch", "pole_times"];

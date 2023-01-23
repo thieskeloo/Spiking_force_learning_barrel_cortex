@@ -163,20 +163,20 @@ for epoch = 1:N_total
 
         % save the validation trials and first touches
         train_data.trials{trial} = trialId;
-        train_data.first_touches(trial,1) = test_trials(trial).first_touch;
+        train_data.first_touches(trial,1) = train_trials(trial).first_touch;
 
-        % get the spikinging statistics
-        trial_length = length(Z_out);
-        [A_t, ISI, Cv] = spike_stats(tspikes, trial_length , N);
+%         % get the spikinging statistics
+%         trial_length = length(Z_out);
+%         [A_t, ISI, Cv] = spike_stats(tspikes, trial_length , N);
 
         train_data.output_weights{trial} = output;
         train_data.error{trial} = err;
-        train_data.Zx{trial} = Zx;
-        train_data.Z_out{trial} = Z_out;
-        train_data.tspikes{trial} = tspikes;
-        train_data.stats{trial}.A_t = A_t;
-        train_data.stats{trial}.ISI = ISI;
-        train_data.stats{trial}.Cv = Cv;
+%         train_data.Zx{trial} = Zx;
+%         train_data.Z_out{trial} = Z_out;
+%         train_data.tspikes{trial} = tspikes;
+%         train_data.stats{trial}.A_t = A_t;
+%         train_data.stats{trial}.ISI = ISI;
+%         train_data.stats{trial}.Cv = Cv;
     end
 
 
