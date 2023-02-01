@@ -31,7 +31,7 @@ trainable_trials = file.trainable_trials;
 % SpikeTrainStruct 
 for trial = 1:N_train
 
-    if exist('./Spiking structures/570.mat', 'file') ~= 2
+    if exist(['./Spiking structures/' num2str(train_trials(trial).spike_struct)], 'file') ~= 2
 
         trialId = train_trials(trial).trial;
     
