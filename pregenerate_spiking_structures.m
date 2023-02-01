@@ -30,12 +30,16 @@ trainable_trials = file.trainable_trials;
 %% loop through trials
 % SpikeTrainStruct 
 for trial = 1:N_train
-    trialId = train_trials(trial).trial;
 
-    % get the trial session and create the spikingstruct
-    session = train_trials(trial).session;
-    SpikeTrainStruct = make_trial_spikes(session, trialId,...
-        whiskmat, KernelStruct);
+    if exist('./Spiking structures/570.mat', 'file') ~= 2
 
-   save(['./Spiking structures/' num2str(train_trials(trial).spike_struct)], "SpikeTrainStruct")
+        trialId = train_trials(trial).trial;
+    
+        % get the trial session and create the spikingstruct
+        session = train_trials(trial).session;
+        SpikeTrainStruct = make_trial_spikes(session, trialId,...
+            whiskmat, KernelStruct);
+    
+       save(['./Spiking structures/' num2str(train_trials(trial).spike_struct)], "SpikeTrainStruct")
+    end
 end
