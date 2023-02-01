@@ -42,7 +42,7 @@ input = Win.*rand(RandStream('mt19937ar','Seed',seed),N,N_th).*(rand(RandStream(
 
 % static weights
 if Pexc == 0
-    static = G*(randn(RandStream('mt19937ar','Seed',seed),N,N)).*(rand(RandStream('mt19937ar','Seed',seed),N,N)<p)/(sqrt(N)*p);
+    static = G*(randn(RandStream('mt19937ar','Seed',seed),N,N)).*(rand(RandStream('mt19937ar','Seed',seed),N,N) < p)/(sqrt(N)*p);
 
     % set the row average to be zero, explicitly, to induce chaotic spiking
     for i = 1:1:N
@@ -73,7 +73,7 @@ else
 end
 
 % feedback weights
-feedback = Q*(2*rand(RandStream('mt19937ar','Seed',2411),N,k)-1);
+feedback = Q*(2*rand(RandStream('mt19937ar','Seed',seed),N,k)-1);
 
 % output weights
 output = zeros(N, k);
