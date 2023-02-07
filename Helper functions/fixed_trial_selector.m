@@ -1,5 +1,5 @@
 function [fixed_train, fixed_val] =...
-    fixed_trial_selector(prox_touch, dist_no_touch, N_train, N_test)
+    fixed_trial_selector(prox_touch, dist_no_touch, N_train, N_test, seed)
 % fixed_trial_selector gets the fixed whisker trials to train and test the
 % network, by selecting one proximal and one distal trial 
 % Input:
@@ -11,7 +11,8 @@ function [fixed_train, fixed_val] =...
 %   * fixed_train = struct containing shuffled training trials
 %   * fixed_val = struct containing shuffled test trials
 
-rng(0) % same sequence of random numbers
+rng(seed, 'twister'); % same sequence of random numbers
+
 
 % randomly selects one distal and one proximal trial 
 train_prox(1:N_train/2) = randi([1,length(prox_touch)],1);

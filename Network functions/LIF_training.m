@@ -1,4 +1,4 @@
-function [training_output] = LIF_training(param, scale_param, savefolder)
+function [training_output] = LIF_training(param, scale_param, savefolder, seed)
 % LIF_TRAINING prepares the weights and input of the network, and runs the
 % test and train trials of the network with spiking neurons, based on the
 % leaky integrate and firing model
@@ -33,16 +33,15 @@ k = 1;   % number of outputs
 input_type = param.input_type;
 
 %random seed
-rng('shuffle')
-seed = 42;%randi(intmax('uint32'), 'uint32');
+rng(seed,"twister");
 
 %% Initialize matrix weights
 % input weights
-input = Win.*rand(RandStream('mt19937ar','Seed',seed),N,N_th).*(rand(RandStream('mt19937ar','Seed',seed),N,N_th) < Winp);
+input = Win.*rand(N,N_th).*(rand(N,N_th) < Winp);
 
 % static weights
 if Pexc == 0
-    static = G*(randn(RandStream('mt19937ar','Seed',seed),N,N)).*(rand(RandStream('mt19937ar','Seed',seed),N,N) < p)/(sqrt(N)*p);
+    static = G*(randn(N,N)).*(rand(N,N) < p)/(sqrt(N)*p);
 
     % set the row average to be zero, explicitly, to induce chaotic spiking
     for i = 1:1:N
@@ -73,7 +72,7 @@ else
 end
 
 % feedback weights
-feedback = Q*(2*rand(RandStream('mt19937ar','Seed',seed),N,k)-1);
+feedback = Q*(2*rand(N,k)-1);
 
 % output weights
 output = zeros(N, k);

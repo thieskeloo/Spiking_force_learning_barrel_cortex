@@ -1,5 +1,5 @@
 function run = run_sim(N, N_th, N_train, N_test, N_total, Win, G, Q,...
-    Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder)
+    Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder, seed)
 % RUN prepares and runs the simulation
 % Input:
 %   * N = number of neurons in the reservoir
@@ -56,7 +56,7 @@ trainable_trials = file.trainable_trials;
 %     trainable_trials.dist_no_touch, N_train, N_test);
 % get the fixed train and test trials; one distal and one proximal trial
 [train_trials, test_trials] = fixed_trial_selector(trainable_trials.prox_touch,...
-    trainable_trials.dist_no_touch, N_train, N_test);
+    trainable_trials.dist_no_touch, N_train, N_test, seed);
 
 %{
 FIXED TRIALS
@@ -82,6 +82,7 @@ parameters_in = struct('N', N, 'N_th' , N_th, 'N_train', N_train,...
     'alpha', alpha, 'FORCE', FORCE, 'makespikes', makespikes,...
     'input_type', input_type, 'Ibias', Ibias, 'step', step, 'dt', dt,...
     'rate', rate, 'tau_r', tau_r,'train_trials', train_trials, 'test_trials', test_trials);
+
 %% Train and test the network
 mkdir(savefolder)
 run = cell(1, size(param_comb, 1)); 
@@ -99,6 +100,6 @@ for i = 1: size(param_comb, 1) % change to parfor during paramsweep
     
     % run the network
     run{i}.parameters_out = LIF_training(parameters_in,...
-        scale_parameters, savefolder);
+        scale_parameters, savefolder,seed);
 end
 
