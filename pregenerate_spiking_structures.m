@@ -1,5 +1,10 @@
+
+
 N_train = 20;     % number of training trials
 N_test = 10;      % number of validation trials
+
+addpath(genpath('Spiking structures'))
+addpath(genpath('Helper data'))
 
 f = filesep;
 filename = ['.' f 'Input' f 'KernelStruct.mat'];
@@ -24,12 +29,12 @@ whiskmat = whiskmat.filtered_whiskmat;
 
 file = load('trainable_trials');
 trainable_trials = file.trainable_trials;
-[train_trials, test_trials] = fixed_trial_selector(trainable_trials.prox_touch,...
-    trainable_trials.dist_no_touch, N_train, N_test);
+% [train_trials, test_trials] = fixed_trial_selector(trainable_trials.prox_touch,...
+%     trainable_trials.dist_no_touch, N_train, N_test);
 
 %% loop through trials
 % SpikeTrainStruct 
-for trial = 1:N_train
+for trial = 1:length(trainable_trials.dist_no_touch)
 
     if exist(['./Spiking structures/' num2str(train_trials(trial).spike_struct)], 'file') ~= 2
 
