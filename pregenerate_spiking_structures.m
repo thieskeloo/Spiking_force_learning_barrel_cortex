@@ -1,6 +1,16 @@
 N_train = 20;     % number of training trials
 N_test = 10;      % number of validation trials
 
+rng(0)
+
+%% Add subfolders and import data
+addpath(genpath('Spiking structures'))
+addpath(genpath('Helper data'))
+addpath(genpath('Helper functions'))
+addpath(genpath('Thalamus functions'))
+addpath(genpath('Network functions'))
+addpath(genpath('Parameter schemes'))
+
 f = filesep;
 filename = ['.' f 'Input' f 'KernelStruct.mat'];
 
@@ -29,7 +39,7 @@ trainable_trials = file.trainable_trials;
 
 %% loop through trials
 % SpikeTrainStruct 
-for trial = 1:N_train
+parfor trial = 1:N_train
 
     if exist(['./Spiking structures/' num2str(train_trials(trial).spike_struct)], 'file') ~= 2
 
