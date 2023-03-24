@@ -35,6 +35,7 @@ input_type = param.input_type;
 %random seed
 rng(seed,"twister");
 
+vStart = rand(N,1).*25 - 65;
 %% Initialize matrix weights
 % input weights
 input = Win.*rand(N,N_th).*(rand(N,N_th) < Winp);
@@ -148,8 +149,8 @@ for epoch = 1:N_total
         old_output = output;
 
         if strcmp('spikes', input_type)
-            [err, output, Zx, Z_out, tspikes] =...
-                LIF_spiking_network(param, weights, thalamus_input, target, FORCE);
+            [err, output, Zx, Z_out, tspikes, vStart] =...
+                LIF_spiking_network(param, weights, thalamus_input, target, FORCE, vStart, seed);
         else
             [err, output, Zx, Z_out, tspikes] =...
                 LIF_spiking_network_no_filt(param, weights, thalamus_input, target, FORCE);
@@ -212,8 +213,8 @@ for epoch = 1:N_total
 
         % SIMULATE NETWORK
         if strcmp('spikes', input_type)
-            [err, output_weights, Zx, Z_out, tspikes] =...
-                LIF_spiking_network(param, weights, thalamus_input, target, FORCE);
+            [err, output_weights, Zx, Z_out, tspikes, vStart] =...
+                LIF_spiking_network(param, weights, thalamus_input, target, FORCE, vStart, seed);
         else
             [err, output_weights, Zx, Z_out, tspikes] =...
                 LIF_spiking_network_no_filt(param, weights, thalamus_input, target, FORCE);

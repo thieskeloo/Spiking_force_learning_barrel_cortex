@@ -1,4 +1,4 @@
-function [error, output_weights, Zx, Z_out, tspikes] = LIF_spiking_network(param, weights, thalamus_input, target, FORCE)
+function [error, output_weights, Zx, Z_out, tspikes, v] = LIF_spiking_network(param, weights, thalamus_input, target, FORCE, vStart, seed)
 % LIF_SPIKING_NETWORK computes the dynamics of the spiking neural network
 % and applies FORCE learning, only for input type 'spikes'
 % Input:
@@ -29,7 +29,7 @@ tref = 2;       % refractory time period (ms)
 tau_m = 10;     % membrane time constant (ms)
 vreset = -65;   % reset potential (V)
 vthresh = -40;  % threshold potential (V) 
-rng(1);         % every time the same random distribution 
+rng(seed, 'twister');         % every time the same random distribution 
 
 %% Define weights
 output_weights = weights.output;
@@ -60,7 +60,8 @@ Ipsc = zeros(N,1);
 Ispikes = 0*Ipsc; 
 
 % initialize neuronal voltage with random distribtuions
-v = vreset + rand(N,1)*(30-vreset); 
+% v = vreset + rand(N,1)*(30-vreset);
+v = vStart;
 
 % refactory times, spiketimes and total number of spikes
 tlast = zeros(N,1); 
@@ -73,7 +74,7 @@ h = zeros(N,1);
 r = zeros(N,1); 
 hr = zeros(N,1); 
  
-% initialize z output and storage value
+% initialize output and storage value
 Z = 0; 
 Z_out = zeros(T,1);
 
@@ -145,7 +146,7 @@ for i = 1:1:nt
     hr = hr*exp(-dt/tau_d) + (v>=vthresh)/(tau_r*tau_d);
     
     % spike and reset the voltage of the neurons that fired
-    v = v + (30 - v).*(v >= vthresh);
+%     v = v + (30 - v).*(v >= vthresh);
     v = v + (vreset - v).*(v >= vthresh);
 end
 

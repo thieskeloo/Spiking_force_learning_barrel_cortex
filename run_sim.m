@@ -45,6 +45,9 @@ rate = 5;               % rate of the intermediate poisson firing (Hz)
 %% Get the combination struct of the scaling parameters
 param_comb = all_comb(Win, G, Q, Winp, Pexc);
 
+%% generate input spiketrain files
+pregenerate_spiking_structures(seed);
+
 %% Prepare a set of train and test trials
 
 % load list of trial names

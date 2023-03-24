@@ -40,7 +40,6 @@ input_type = 'spikes';  % options: 'ConvTrace', 'PSTH', 'spikes'
 repeat = 3; % how many times to repeat the test(s)
 seed = 42; % seed used for all rng (trial selection and random network generation etc)
 
-%% generate input spiketrain files
 
 
 %% Run the simulation
