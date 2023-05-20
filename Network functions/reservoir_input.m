@@ -1,4 +1,4 @@
-function [reservoir_input, target_function] = reservoir_input(SpikeTrainStruct, Ein, N, N_th, dat, rate, input_type)
+function [reservoir_input, target_function] = reservoir_input(SpikeTrainStruct, Ein, N, N_th, dat, rate, input_type, seed)
 % RESERVOIR_INPUT takes the nth thalamic spike times and makes neuron spiking
 % input for the reservoir and returns this. 
 % Input:
@@ -105,7 +105,7 @@ elseif strcmp('spikes', input_type)
     
     % make the poisson input
     % makes the poisson spikes random
-    rng('shuffle') 
+    rng(seed, 'twister');         % every time the same random distribution 
     
     % makes the poisson spikes fixed
     %rng(0) 

@@ -142,7 +142,7 @@ for epoch = 1:N_total
         % get the pole location and the input struct and target function
         pole = train_trials(trial).ytrain;
         [thalamus_input, target] =...
-            reservoir_input(SpikeTrainStruct, input, N, N_th, pole, rate, input_type);
+            reservoir_input(SpikeTrainStruct, input, N, N_th, pole, rate, input_type, seed);
 
         % SIMULATE NETWORK 
         % save the old output weights
