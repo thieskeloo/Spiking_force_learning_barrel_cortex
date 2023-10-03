@@ -13,7 +13,8 @@
 %   * angle_curve_plot
 
 disp('Remember to adjust the training files to save the network input')
-pause;
+seed = 1234;
+% pause;
 %% Add paths
 f = filesep;
 main_dir = 'Input_demo_scaled';
@@ -32,8 +33,8 @@ savefolder_thalamus = ['.' f 'Output' f main_dir f savename];
 % input parameters
 N = 2000;        % number of neurons in the reservoir 
 N_th = 200;      % number of thalamus neurons
-N_train = 600;   % number of training trials
-N_test = 100;    % number of validation trials
+N_train = 2;   % number of training trials
+N_test = 1;    % number of validation trials
 N_total = 1;     % number of epochs 
 
 % weight scaling parameters
@@ -54,18 +55,18 @@ Pexc = 0;   % percentage of excitatory neurons; set to 0 to ignore Dale's law re
 input_type = 'spikes';  % options: 'ConvTrace', 'PSTH', 'spikes'
 %% Filtered trace
 Win = 0.2; % the input weight
-run_filter = run_sim(N, N_th, N_train, N_test, N_total, Win, G,...
-    Q, Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder_filter);
+run_filter = run_sim(N, N_th, N_train, N_test, N_total, Win, G, Q, Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder_filter, seed);
+%        run = run_sim(N, N_th, N_train, N_test, N_total, Win, G, Q, Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder, seed);
 
 %% PSTH of trace
 Win = 0.1; % the input weight
 run_trace = run_sim(N, N_th, N_train, N_test, N_total, Win, G,...
-    Q, Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder_PSTH);
+    Q, Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder_PSTH, seed);
 
 %% Thalamus spikes
 Win = 0.05; % the input weight
 run_thalamus = run_sim(N, N_th, N_train, N_test, N_total, Win, G, Q,...
-    Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder_thalamus);
+    Winp, alpha, Pexc, FORCE, makespikes, input_type, savefolder_thalamus, seed);
 
 %% Plot the different inputs and raster plots
 epoch = 1;  % number of epochs

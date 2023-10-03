@@ -1,4 +1,4 @@
-function [ SpikeTrainStruct, pole ] = dynamic_spike_maker(KernelStruct, dat)
+function [ SpikeTrainStruct, pole ] = dynamic_spike_maker(KernelStruct, dat, seed)
 % DYNAMIC_SPIKE_MAKER makes thalamic spikes trains for specific trials
 % Input:
 %   * KernelStruct = struct containing thalamic kernels
@@ -7,6 +7,7 @@ function [ SpikeTrainStruct, pole ] = dynamic_spike_maker(KernelStruct, dat)
 %   * SpikeTrainStruct = struct containing the corresponding thalamic
 % spike trains
 %   * pole = pole (-1 or 1)
+rng(seed, 'twister'); % same sequence of random numbers
 
 %% Make barrelstruct
 Nbx = 1;                                                % # of barrels 'x-direction'

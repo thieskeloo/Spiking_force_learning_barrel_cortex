@@ -16,6 +16,8 @@ function [reservoir_input, target_function] = reservoir_input(SpikeTrainStruct, 
 % Helper functions:
 %   * scale_input
 
+rng(seed, 'twister');         % every time the same random distribution
+
 %% Target pulse
 trial_len = length(SpikeTrainStruct{1}.PSTH{1}); % length of trial
 pulse_length = 1000;    % length of pulse (ms)
@@ -105,7 +107,7 @@ elseif strcmp('spikes', input_type)
     
     % make the poisson input
     % makes the poisson spikes random
-    rng(seed, 'twister');         % every time the same random distribution 
+     
     
     % makes the poisson spikes fixed
     %rng(0) 

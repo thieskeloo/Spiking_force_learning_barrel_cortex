@@ -22,7 +22,7 @@
 %   * weight_change_plot
 %% Load the network output file
 % for example: 'Win_0.5G_10Q_1Winp_1Pexc_0.mat'
-file = load('Win_0.5G_3Q_1Winp_1Pexc_0.mat');
+file = load('Win_0.5G_10Q_1Winp_1Pexc_0Acc_0.89Seed__.mat');
 training_output = file.training_output;
 scale_param = file.scale_param;
 
@@ -30,17 +30,18 @@ scale_param = file.scale_param;
 N = 2000;    % number of neurons
 N_train = 600;  % number of training trials
 dt = 0.05;   % integration time constant (ms)
-epoch = 1;   % number of epoch (of N_total)
-N_test = 50;  % validation trial number (of N_test)
+epoch = 2;   % number of epoch (of N_total)
+N_test = 100;  % validation trial number (of N_test)
 
 test_output = training_output(epoch).test_output;
 
 %% Single trial network output
 % output vs target
-output = test_output.Z_out{N_test};
-target = test_output.Zx{N_test};
+output = test_output.Z_out{41};
+target = test_output.Zx{41};
 
 figure
+% title("")
 output_vs_target_plot(output, target)
 %% Sequence of trials with network output
 % Select a trainings epoch
@@ -213,6 +214,8 @@ ylim([-2.5 2.5])
 xlim([-50 3500])
 legend('network output', 'target')
 title('Output vs target')
+xlabel('Time (ms)')
+ylabel('Output')
 hold off
 end
 
